@@ -66,3 +66,9 @@
     padding-right: 10px;
     cursor: pointer;
 }
+
+@media(max-width:600px) {
+    .Sidebar {
+        display: none;
+    }
+}

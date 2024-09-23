@@ -10,12 +10,24 @@ const ContextProvider = (props) => {
   const [showResult, setShowResult] = useState(false);
   const [loading, setLoading] = useState(false);
   const [resultData, setResultData] = useState("");
+  const newchat = () => {
+    setLoading(false);
+    setShowResult(false);
+  };
   const onSent = async (prompt) => {
     setResultData("");
     setLoading(true);
     setShowResult(true);
-    setPrevPrompts((prev) => [...prev, input]);
-    const result = await runchat(input);
+    let response;
+    if (prompt !== undefined) {
+      response = await runchat(prompt);
+      setRecentPrompt(prompt);
+    } else {
+      setPrevPrompts((prev) => [...prev, input]);
+      setRecentPrompt(input);
+      response = await runchat(input);
+    }
+    // const result = await runchat(input);
     // logic to avoid ** and make it bold
     // now wherever the * present in the result it converts in substring.
     // let responsearray = result.split("**");
@@ -27,8 +39,9 @@ const ContextProvider = (props) => {
     //     newresponse += "<b>" + responsearray[i] + "</b>";
     //   }
     // }
-    setRecentPrompt(input);
-    setResultData(result);
+    // setRecentPrompt(input);
+    // setResultData(result);
+    setResultData(response);
     // setResultData(newresponse);
     setLoading(false);
     setInput("");
@@ -47,6 +60,7 @@ const ContextProvider = (props) => {
     resultData,
     input,
     setInput,
+    newchat,
   };
   return (
     <Context.Provider value={contextvalue}>{props.children}</Context.Provider>
